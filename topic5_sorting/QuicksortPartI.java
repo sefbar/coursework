@@ -1,47 +1,73 @@
 import java.io.*;
-import java.util.*;
-import java.text.*;
 import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.regex.*;
 
 public class Solution {
 
+    // Complete the quickSort function below.
     static int[] quickSort(int[] arr) {
-        int pivotValue = arr[0];
-        List<Integer> left = new ArrayList<Integer>();
-        List<Integer> right = new ArrayList<Integer>();
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i] < pivotValue) {
-                left.add(arr[i]);
-            } else {
-                right.add(arr[i]);
-            }
+        int pivot = arr[0];
+        int left = 0, right = arr.length -1;
+        while(left < right){
+            while(arr[left] < pivot)
+                left++;
+            while(arr[right] > pivot)
+                right--;
+            if(left < right)
+                swap(arr, left, right);
         }
-        printArray(left);
-        System.out.print(pivotValue + " ");
-        printArray(right);
-        return new int[0];
+        printArray(arr);
+        return arr;
     }
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        int[] arr = new int[n];
-        for(int arr_i = 0; arr_i < n; arr_i++){
-            arr[arr_i] = in.nextInt();
-        }
-        int[] result = quickSort(arr);
-        for (int i = 0; i < result.length; i++) {
-            System.out.print(result[i] + (i != result.length - 1 ? " " : ""));
-        }
-        System.out.println("");
-
-
-        in.close();
-    }
-    private static void printArray(List<Integer> ar) {
-        for(int n: ar){
+    static void printArray(int[] arr) {
+        for(int n : arr){
             System.out.print(n + " ");
         }
+    }
+
+    static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        int[] arr = new int[n];
+
+        String[] arrItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < n; i++) {
+            int arrItem = Integer.parseInt(arrItems[i]);
+            arr[i] = arrItem;
+        }
+
+        int[] result = quickSort(arr);
+
+        for (int i = 0; i < result.length; i++) {
+            bufferedWriter.write(String.valueOf(result[i]));
+
+            if (i != result.length - 1) {
+                bufferedWriter.write(" ");
+            }
+        }
+
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
     }
 }
